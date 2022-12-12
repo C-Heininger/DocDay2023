@@ -1,0 +1,45 @@
+---
+output: 
+    pdf_document:
+        latex_engine: xelatex
+params:
+  data: NULL
+  id: NULL
+  surname: NULL
+  firstname: NULL
+  authors: NULL
+  programme: NULL
+  aor: NULL
+  semester: NULL
+  title: NULL
+  text: NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Abstract ID: `r params$id`
+
+Student: `r params$surname` `r params$firstname`
+
+Area of Research: `r params$aor`
+
+PhD Programme: `r params$programme`
+
+Semester: `r params$semester`
+
+# `r params$title`
+
+`r params$authors`
+\
+\
+\
+`r params$text`
+
+```{r, echo=F}
+knitr::kable(params$data)
+```
+
+
+
