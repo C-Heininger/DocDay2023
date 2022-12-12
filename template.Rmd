@@ -1,8 +1,9 @@
 ---
 output: 
     pdf_document:
-        latex_engine: xelatex
-params:
+        latex_engine: xelatex                                                   
+        # This engine can print special characters to PDF
+params:                                                                         
   data: NULL
   id: NULL
   surname: NULL
@@ -14,6 +15,8 @@ params:
   title: NULL
   text: NULL
 ---
+
+<!-- Parameters are defined all as NULL in the template and filled on a per-abstract basis for the final PDF -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
