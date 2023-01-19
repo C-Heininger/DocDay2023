@@ -39,9 +39,15 @@ apply(all_abstracts, 1, function(x){
 })
 
 
+abstracts_list <- vector(mode = "list", length = nrow(all_abstracts))
 
+for (i in 1:nrow(all_abstracts)) {
+  
+  abstracts_list[[i]] <- as.data.frame(all_abstracts[i,])
+  
+}
 
-
+names(abstracts_list) <- paste0(all_abstracts$`Record ID`, "_", all_abstracts$Surname)
 
 
 

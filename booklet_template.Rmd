@@ -1,0 +1,82 @@
+---
+output: 
+    pdf_document:
+        latex_engine: xelatex                                                   
+        # This engine can print special characters to PDF
+params:                                                                         
+  data: NULL
+  id: NULL
+  surname: NULL
+  firstname: NULL
+  authors: NULL
+  programme: NULL
+  aor: NULL
+  semester: NULL
+  title: NULL
+  text: NULL
+---
+
+```{r make list of abstracts, include=FALSE}
+
+suppressPackageStartupMessages(library(tidyverse))
+
+all_abstracts <- read_delim("abstracts_onecell.txt", 
+                            delim = "\t",
+                            col_names = TRUE,
+                            locale = locale(encoding = "latin1"))               # file contains Umlaute, locale specification necessary
+
+all_abstracts[22, "Surname"] <- "Krivic"                                        # name contained special character, changed to simplify
+
+all_abstracts$Author <- gsub(";", "; ", all_abstracts$Author)                   # introducing spaces after each semicolon for nicer formating
+
+
+abstracts_list <- vector(mode = "list", length = nrow(all_abstracts))
+
+for (i in 1:nrow(all_abstracts)) {
+  
+  abstracts_list[[i]] <- as.data.frame(all_abstracts[i,])
+  
+}
+
+names(abstracts_list) <- paste0(all_abstracts$`Record ID`, "_", all_abstracts$Surname)
+
+
+```
+
+```{r make one page of PDF per abstract, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n")
+    
+    cat(paste0("Student: ", abstract$`Surname`, " ", abstract$`FirstName`))
+    cat("\n")
+    
+    cat(paste0("Area of Research: ", abstract$`CONSENS`))
+    cat("\n")
+    
+    cat(paste0("PhD Programme: ", abstract$`PhDProgramme`))
+    cat("\n")
+    
+    cat(paste0("Semester: ", abstract$`Semester`))
+    cat("\n")
+    
+    cat(paste0(abstract$`AbstractTitle`))
+    cat("\n")
+    
+    cat(paste0(abstract$`Author`))
+    cat("\n")
+    cat("\n")
+    cat("\n")
+    cat("\n")
+    
+    cat(paste0(abstract$`Abstract text`))
+    cat("\n\n\\pagebreak\n")
+    
+}
+
+```
+
+
+
