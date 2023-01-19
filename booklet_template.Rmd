@@ -48,31 +48,19 @@ names(abstracts_list) <- paste0(all_abstracts$`Record ID`, "_", all_abstracts$Su
 for (abstract in abstracts_list) {
     
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
-    cat("\n")
+    cat("\n\n")
     
-    cat(paste0("Student: ", abstract$`Surname`, " ", abstract$`FirstName`))
-    cat("\n")
+    cat(paste0("\\huge ", abstract$`AbstractTitle`))
+    cat("\n\n")
     
-    cat(paste0("Area of Research: ", abstract$`CONSENS`))
-    cat("\n")
+    cat(paste0("\\normalsize ", abstract$`Author`))
+    cat("\n\n")
     
-    cat(paste0("PhD Programme: ", abstract$`PhDProgramme`))
-    cat("\n")
-    
-    cat(paste0("Semester: ", abstract$`Semester`))
-    cat("\n")
-    
-    cat(paste0(abstract$`AbstractTitle`))
-    cat("\n")
-    
-    cat(paste0(abstract$`Author`))
-    cat("\n")
-    cat("\n")
-    cat("\n")
-    cat("\n")
+    cat(paste0(abstract$Affiliations))
+    cat("\n\n")
     
     cat(paste0(abstract$`Abstract text`))
-    cat("\n\n\\pagebreak\n")
+    cat("\n\n\n\n\\pagebreak\n\n")
     
 }
 
