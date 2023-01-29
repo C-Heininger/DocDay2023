@@ -7,19 +7,22 @@ output:
     pdf_document:
         latex_engine: xelatex                                                   
         # This engine can print special characters to PDF
+        
+mainfont: Arial
 ---
 
-\newpage
-\tableofcontents
 \newpage
 
 ```{r make list of abstracts, include=FALSE}
 
 suppressPackageStartupMessages(library(tidyverse))
 
-all_abstracts <- read_delim("abstracts_onecell_sessionnum.txt", 
+session_order <- read_delim("session_order.txt", delim = "\t", col_names = TRUE)
+
+all_abstracts <- read_delim("abstracts_onecell.txt", 
                             delim = "\t",
-                            col_names = TRUE)               # file contains Umlaute, locale specification necessary
+                            col_names = TRUE,
+                            locale = locale(encoding = "latin1")) %>% full_join(., session_order, by = "Record ID")
 
 # all_abstracts$Author <- gsub(";", "; ", all_abstracts$Author)                   # introducing spaces after each semicolon for nicer formating
 
@@ -34,15 +37,13 @@ for (i in 1:nrow(all_abstracts)) {
   
 }
 
-names(abstracts_list) <- paste0(all_abstracts$`Record ID`, "_", all_abstracts$Surname)
+names(abstracts_list) <- paste0(all_abstracts$`Record ID`, "_", all_abstracts$`Last name`)
 
 abstracts_list <- lapply(abstracts_list, function(df) {
   
   df <- mutate(df,
-    "Author" = str_split(df$Author, "; "),
-    "AffiliationNumbering" = str_split(df$AffiliationNumbering, ";")
-  ) %>% mutate(
-    "AuthorAffils" = paste0(unlist(Author), "^", unlist(AffiliationNumbering), "^" , collapse = " , ")
+    "AuthorAffils" = paste0(unlist(str_split(df$Author, ";")), "^", unlist(str_split(df$AffiliationNumbering, ";")), "^" , collapse = ", "),
+    "Affiliations" = paste0(as.vector(1:length(str_split(df$Affiliations, ";")[[1]])), " ", unlist(str_split(df$Affiliations, ";")), collapse = ";\n\n")
   )
   
   return(df)
@@ -60,7 +61,7 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 1) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
     
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
@@ -71,10 +72,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -90,8 +91,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 2) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -101,10 +102,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -120,8 +121,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 3 | abstract$SessionNum == 4 | abstract$SessionNum == 5) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -131,10 +132,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -150,8 +151,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 6) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -161,10 +162,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -180,8 +181,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 7) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -191,10 +192,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -210,8 +211,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 8 | abstract$SessionNum == 9 | abstract$SessionNum == 10) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -221,10 +222,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -240,8 +241,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 11) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -251,10 +252,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -270,8 +271,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 12) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -281,10 +282,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -300,8 +301,8 @@ for (abstract in abstracts_list) {
   
   if (abstract$SessionNum == 13 | abstract$SessionNum == 14 | abstract$SessionNum == 15) {
     
-    cat(paste0("\\subsection{", abstract$`Surname`, " ", abstract$`FirstName`, "}"))
-
+    cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+    
     cat(paste0("Abstract ID: ", abstract$`Record ID`))
     cat("\n\n")
     
@@ -311,10 +312,10 @@ for (abstract in abstracts_list) {
     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
     cat("\n\n")
     
-    cat(paste0(abstract$Affiliations))
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
     cat("\n\n")
     
-    cat(paste0(abstract$`Abstract text`))
+    cat(paste0("\\normalsize ", abstract$`Abstract text`))
     cat("\n\n\n\n\\pagebreak\n\n")
     
   }
@@ -322,4 +323,6 @@ for (abstract in abstracts_list) {
 
 ```
 
-
+\newpage
+\tableofcontents
+\newpage
