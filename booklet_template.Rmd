@@ -1,5 +1,5 @@
 ---
-title: "| ![](csm_med-uni-logo_0134ecce35.png){width=6in} \\vspace{0.2in} \n DocDay 2023\n \\vspace{0.1in}"
+title: "![](csm_med-uni-logo_0134ecce35.png){width=6in} \\vspace{0.2in} DocDay 2023 \\vspace{0.1in}"
 subtitle: "Abstract Book"
 date: "February 9, 2023"
 
