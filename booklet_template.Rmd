@@ -24,8 +24,6 @@ all_abstracts <- read_delim("abstracts_onecell.txt",
                             col_names = TRUE,
                             locale = locale(encoding = "latin1")) %>% full_join(., session_order, by = "Record ID")
 
-# all_abstracts$Author <- gsub(";", "; ", all_abstracts$Author)                   # introducing spaces after each semicolon for nicer formating
-
 
 abstracts_list <- vector(mode = "list", length = nrow(all_abstracts))
 
