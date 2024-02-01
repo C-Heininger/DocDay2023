@@ -1,0 +1,470 @@
+---
+title: "![](csm_med-uni-logo_0134ecce35.png){width=6in} \\vspace{0.2in} DocDay 2024 \\vspace{0.1in}"
+subtitle: "Abstract Book"
+date: "February 8, 2024"
+
+output: 
+    pdf_document:
+        latex_engine: xelatex                                                   
+        # This engine can print special characters to PDF
+        
+mainfont: Arial
+---
+
+\newpage
+
+```{r make list of abstracts, include=FALSE}
+
+suppressPackageStartupMessages(library(tidyverse))
+
+cancer_session <- read_delim("2024_cancer.txt", delim = "\t", col_names = TRUE)
+metabolism_session <- read_delim("2024_metabolism.txt", delim = "\t", col_names = TRUE)
+immunology_session <- read_delim("2024_immunology.txt", delim = "\t", col_names = TRUE)
+computational_session <- read_delim("2024_computational.txt", delim = "\t", col_names = TRUE)
+neuroscience_session <- read_delim("2024_neuroscience.txt", delim = "\t", col_names = TRUE)
+sustainable_session <- read_delim("2024_sustainable_health.txt", delim = "\t", col_names = TRUE)
+
+cancer_session <- filter(cancer_session, !is.na(cancer_session$Session))
+metabolism_session <- filter(metabolism_session, !is.na(metabolism_session$Session))
+immunology_session <- filter(immunology_session, !is.na(immunology_session$Session))
+computational_session <- filter(computational_session, !is.na(computational_session$Session))
+neuroscience_session <- filter(neuroscience_session, !is.na(neuroscience_session$Session))
+sustainable_session <- filter(sustainable_session, !is.na(sustainable_session$Session))
+
+all_abstracts <- bind_rows(cancer_session,
+                           metabolism_session,
+                           immunology_session,
+                           computational_session,
+                           neuroscience_session,
+                           sustainable_session)
+
+
+abstracts_list <- vector(mode = "list", length = nrow(all_abstracts))
+
+# all_abstracts <- all_abstracts[order(all_abstracts$SessionNum),]
+
+for (i in 1:nrow(all_abstracts)) {
+  
+  abstracts_list[[i]] <- as.data.frame(all_abstracts[i,])
+  
+}
+
+names(abstracts_list) <- paste0(all_abstracts$`Record ID`, "_", all_abstracts$`Surname`)
+
+abstracts_list <- lapply(abstracts_list, function(df) {
+  
+  df <- mutate(df,
+    "AuthorAffils" = paste0(unlist(str_split(df$Author, ",")), "^", unlist(str_split(df$`AffiliationNumbering...11`, "\\|")), "^" , collapse = ", "),
+    "Affiliations" = paste0(as.vector(1:length(str_split(df$Affiliations, ";")[[1]])), " ", unlist(str_split(df$Affiliations, ";")), collapse = "\n\n")
+  )
+  
+  return(df)
+  
+})
+
+
+```
+
+\section{Talk Session I}
+
+```{r talk session 1, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Talk I") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\section{Talk Session II}
+
+```{r talk session 2, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Talk II") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\section{Poster Session I}
+
+```{r poster session 1, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Poster I") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\section{Talk Session III}
+
+```{r talk session 3, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Talk III") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\section{Talk Session IV}
+
+```{r talk session 4, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Talk IV") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\section{Poster Session II}
+
+```{r poster session 2, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Poster II") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\section{Talk Session V}
+
+```{r talk session 5, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Talk V") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\section {Talk Session VI}
+
+```{r talk session 6, echo=FALSE, results='asis'}
+
+for (abstract in abstracts_list) {
+  
+  if(abstract$Session == "Talk VI") {
+    cat(paste0("\\subsection{", abstract$Surname, " ", abstract$FirstName, "}"))
+    
+    cat(paste0("Abstract ID: ", abstract$`Record ID`))
+    cat("\n\n")
+    
+    cat(paste0("\\huge ", abstract$AbstractTitle))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$AuthorAffils))
+    cat(paste0("\n\n"))
+    
+    cat(paste0("\\footnotesize ", abstract$Affiliations))
+    cat("\n\n")
+    
+    cat(paste0("\\normalsize ", abstract$BackgroundAims))
+    cat("\n\n\n\n\\pagebreak\n\n")
+  }
+  
+#   if(is.na(abstract$SessionNum)) {abstract$SessionNum=FALSE} else {if(abstract$SessionNum == 1) {
+#     
+#     cat(paste0("\\subsection{", abstract$`Last name`, " ", abstract$`FirstName`, "}"))
+#     
+#     cat(paste0("Abstract ID: ", abstract$`Record ID`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\huge ", abstract$`AbstractTitle`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`AuthorAffils`))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\footnotesize ", abstract$Affiliations))
+#     cat("\n\n")
+#     
+#     cat(paste0("\\normalsize ", abstract$`Abstract text`))
+#     cat("\n\n\n\n\\pagebreak\n\n")
+#     
+#   }
+# }
+  }
+
+```
+
+\tableofcontents
+\newpage
+
